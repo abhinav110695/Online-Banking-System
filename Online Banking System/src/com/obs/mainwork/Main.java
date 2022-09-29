@@ -3,8 +3,10 @@ package com.obs.mainwork;
 import java.util.Scanner;
 
 import com.obs.bean.AccountantBean;
+import com.obs.bean.CustomerBean;
 import com.obs.dao.AccountantDAO;
 import com.obs.dao.AccountantDAOimpl;
+import com.obs.exception.AccountException;
 import com.obs.exception.AccountantException;
 import com.obs.exception.CustomerException;
 
@@ -42,13 +44,13 @@ public class Main {
 							+ "3. Remove the account by account number\r\n"
 							+ "4. Viewing particular account details by giving account number\r\n"
 							+ "5. Viewing all the account details\r\n"
-							+ "6. Taking care of deposit and withdrawal operations\r\n");
+							+ "6. Add new account for existing Account holder\r\n"
+							+ "7. Taking care of deposit and withdrawal operations\r\n");
 					
 					int x=sc.nextInt();
 					
 					if(x==1) {
-						String a1="213"+count;
-						count++;
+	
 						System.out.println("Enter Name");
 			 			String a2=sc.next();
 			 			System.out.println("Enter Balance");
@@ -62,17 +64,117 @@ public class Main {
 			 			System.out.println("Enter Address");
 			 			String a7=sc.next();
 			 			
-			 			String s1=null;
+			 			
+			 			int s1=-1;
 						try {
-							s1 = a.addCustomer(a1,a2,a3,a4,a5,a6,a7);
+							s1 = a.addCustomer(a2,a4,a5,a6,a7);
+							try {
+								a.addAccount(a3, s1);
+							} catch (AccountException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						} catch (CustomerException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-			 			if(s1!=null) {
+			 			if(s1!=-1) {
 			 				System.out.println(s1);
 			 			}
 					}
+					
+					
+					if(x==2) {
+						System.out.println("Enter Customer Account No. ");
+			 			int u=sc.nextInt();
+			 			System.out.println("Enter new Address");
+			 			String u2=sc.next();
+			 			try {
+							String mes=a.updateCustomer(u,u2);
+						} catch (CustomerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					if(x==3) {
+						System.out.println("Enter Account no to Delete");
+						int ac=sc.nextInt();
+						String s=null;
+						try {
+							s=a.deleteAccount(ac);
+						} catch (CustomerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							
+						}
+						if(s!=null)
+							System.out.println(s);
+					}
+					
+					if(x==4) {
+						System.out.println("Enter Customer Account No.");
+						String ac=sc.next();
+						
+						try {
+							CustomerBean mes=a.viewCustomer(ac);
+							
+							if(mes!=null) {
+								System.out.println("******************************");
+								System.out.println("Account No: " + mes.getcACno());
+								System.out.println("Name: " + mes.getCname());
+								System.out.println("Balance: " + mes.getCbal());
+								System.out.println("Email: " + mes.getCmail());
+								System.out.println("Password: " + mes.getCpass());
+								System.out.println("Mobile: " + mes.getCmob());
+								System.out.println("Address: " + mes.getCadd());
+								System.out.println("******************************");
+								
+							}else
+								System.out.println("Account no. does not Exist");
+							
+						} catch (CustomerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					
+					if(x==5) {
+						try {
+							
+							CustomerBean mes=a.viewAllCustomer();
+		
+							
+						} catch (CustomerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					if(x==6) {
+						System.out.println("Enter email: ");
+						String e=sc.next();
+						System.out.println("Enter mob: ");
+						String m=sc.next();
+						System.out.println("Enter new Account balance");
+						int b=sc.nextInt();
+						
+						try {
+							int c=a.getCustomer(e,m);
+							try {
+								a.addAccount(b, c);
+							} catch (AccountException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						} catch (CustomerException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+					}
+					
 				}
 			
 				
@@ -82,10 +184,7 @@ public class Main {
 			}
 		}
 		
-		
-		
-		
-	
+
 	}
 
 }
