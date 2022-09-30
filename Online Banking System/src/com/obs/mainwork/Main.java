@@ -1,25 +1,34 @@
 package com.obs.mainwork;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.obs.bean.AccountantBean;
 import com.obs.bean.CustomerBean;
+import com.obs.bean.TransactionBean;
 import com.obs.dao.AccountantDAO;
 import com.obs.dao.AccountantDAOimpl;
+import com.obs.dao.CustomerDAO;
+import com.obs.dao.CustomerDAOimpl;
 import com.obs.exception.AccountException;
 import com.obs.exception.AccountantException;
 import com.obs.exception.CustomerException;
 
 public class Main {
-	static int count=10001;
+	
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
-		System.out.println("Welcome To Online Banking System");
-		 
-		System.out.println("1.Accountant 2.Customer");
-		System.out.println("choose your option");
-		int choice=sc.nextInt();
 		
+		boolean f=true;
+		
+
+		while(f) {
+			System.out.println("Welcome To Online Banking System");
+			 
+			System.out.println("1.Accountant 2.Customer");
+			System.out.println("choose your option");
+			int choice=sc.nextInt();
+			
 		switch(choice) {
 		case 1:
 			System.out.println("Accountant-LOGIN");
@@ -45,7 +54,8 @@ public class Main {
 							+ "4. Viewing particular account details by giving account number\r\n"
 							+ "5. Viewing all the account details\r\n"
 							+ "6. Add new account for existing Account holder\r\n"
-							+ "7. Taking care of deposit and withdrawal operations\r\n");
+							+ "7. Taking care of deposit and withdrawal operations\r\n"
+							+ "8. LOGOUT\r\n");
 					
 					int x=sc.nextInt();
 					
@@ -175,16 +185,150 @@ public class Main {
 						
 					}
 					
+					if(x==7) {
+						CustomerDAO cd=new CustomerDAOimpl();
+						System.out.println("Enter Account No. to view Transaction Records");
+						int ac=sc.nextInt();
+						List<TransactionBean> li=null;
+						try {
+							li=cd.viewTransaction(ac); 
+							System.out.println("Account No.: "+li.get(0).getAccountNo());
+							li.forEach(v->{
+								if(v.getDeposit()!=0)
+									System.out.println("Deposit: "+v.getDeposit());
+								if(v.getWithdraw()!=0)
+									System.out.println("Withdraw: "+v.getWithdraw());
+								System.out.println("Date and Time: "+ v.getTransaction_time());
+							});
+						} catch (CustomerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					if(x==8) {
+						System.out.println("Accountant Logged out");
+						y=false;
+					}
+					
 				}
-			
+			break;
 				
 			} catch (AccountantException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+//	******************************************************************************
+			
+		case 2:
+			
+			System.out.println("Customer-LOGIN");
+			System.out.println("Enter username");
+			String username=sc.next();
+			System.out.println("Enter Password");
+			String password=sc.next();
+			System.out.println("Enter Account No");
+			int acno=sc.nextInt();
+			
+			CustomerDAO cd=new CustomerDAOimpl();
+			
+			try {
+				CustomerBean cusb = cd.LoginCustomer(username, password,acno);
+				//System.out.println(cusb);
+				System.out.println("Welcome "+cusb.getCname());
+				
+				boolean m=true;
+				
+				while(m) {
+					System.out.println("1. View Balance\r\n"
+							+ "2. Deposit Money\r\n"
+							+ "3. Withdraw Money\r\n"
+							+ "4. Transfer Money\r\n"
+							+ "5. View Transaction History\r\n"
+							+ "6. LOGOUT\r\n");
+
+					
+					int x=sc.nextInt();
+					
+					if(x==1) {
+						System.out.println("Current Account Balance");
+						System.out.println(cd.viewBalance(acno)); 
+					}
+					if(x==2) {
+						System.out.println("Enter Amount to Deposit");
+						int am=sc.nextInt();
+						cd.Deposit(acno, am);
+						System.out.println("Your Balance after deposit");
+						System.out.println(cd.viewBalance(acno));
+					}
+					
+					if(x==3) {
+						System.out.println("Enter Withdrawl amount");
+						int wa=sc.nextInt();
+						try {
+							cd.Withdraw(acno, wa);
+							System.out.println("Your Balance after Withdraw");
+							System.out.println(cd.viewBalance(acno));
+						}catch(CustomerException e) {
+							System.out.println(e.getMessage());
+						}
+					}
+					
+					if(x==4) {
+						System.out.println("Enter amount to Transfer");
+						int t=sc.nextInt();
+						System.out.println("Enter Account No. to transfer amount");
+						int ac=sc.nextInt();
+						
+						try {
+							cd.Transfer(acno, t, ac);
+							System.out.println("Amount transferred Succesfully...");
+						}catch(CustomerException e) {
+							System.out.println(e.getMessage());
+						}
+					}
+					
+					if(x==5) {
+						List<TransactionBean> li=null;
+						try {
+							li= cd.viewTransaction(acno);
+						}catch(CustomerException e) {
+							System.out.println(e.getMessage());
+						}
+						
+						System.out.println("Account No.: " + li.get(0).getAccountNo());
+						
+						li.forEach(v->{
+							
+							if(v.getDeposit()!=0)
+								System.out.println("Deposit: "+ v.getDeposit());
+							if(v.getWithdraw()!=0)
+								System.out.println("Widthdraw : "+ v.getWithdraw());
+							System.out.println("Date and Time: "+ v.getTransaction_time());
+						});
+						
+					}
+					
+					
+				}
+			
+				
+				
+			} catch (CustomerException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
+			
+			
+			
+			
+			
 		}
 		
-
+		}
+		
+		
 	}
 
 }

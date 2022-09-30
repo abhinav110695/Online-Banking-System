@@ -250,6 +250,9 @@ public class AccountantDAOimpl implements AccountantDAO{
 		
 	}
 
+	
+//	################################################################################
+	
 
 	@Override
 	public CustomerBean viewAllCustomer() throws CustomerException {
@@ -304,7 +307,12 @@ public class AccountantDAOimpl implements AccountantDAO{
 		return cb;
 	}
 
+	
+	
+//	##################################################################################
 
+	
+	
 	@Override
 	public String deleteAccount(int cACno) throws CustomerException {
 		

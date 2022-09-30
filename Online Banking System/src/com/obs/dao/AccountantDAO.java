@@ -23,4 +23,6 @@ public interface AccountantDAO {
 	public CustomerBean viewAllCustomer() throws CustomerException;
 	
 	public String deleteAccount(int cACno) throws CustomerException;
+	
+	
 }
