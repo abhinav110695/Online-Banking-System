@@ -42,7 +42,7 @@ public class AccountantDAOimpl implements AccountantDAO{
 				
 				
 			}else
-				throw new AccountantException("Invalid Username or password.. ");
+				throw new AccountantException("Invalid Username/Password....Try Again! ");
 			
 			
 		} catch (SQLException e) {
@@ -86,7 +86,7 @@ public class AccountantDAOimpl implements AccountantDAO{
 				 cid=rs.getInt("cid");
 			 }
 			 
-			 System.out.println("Account added sucessfully..!");
+			 
 		 }else
 			 System.out.println("Inserted data is not correct");
 		 
@@ -151,11 +151,13 @@ public class AccountantDAOimpl implements AccountantDAO{
 	     
 		int x=ps.executeUpdate();
 		 
-		 if(x > 0)
-			 System.out.println("data updated in InfoCustomer sucessfully..!");
-		 else
-			 System.out.println("updation failed");
-		 
+		 if(x > 0) {
+			 System.out.println("Address updated sucessfully..!");
+		 	 System.out.println("-------------------------------");
+		 }else {
+			 System.out.println("Updation failed....Account Not Found");
+			 System.out.println("--------------------------------------");
+		 }
 		}catch(SQLException e) {
 			
 			e.printStackTrace();
@@ -163,6 +165,44 @@ public class AccountantDAOimpl implements AccountantDAO{
 		}
 		
 		return message;
+	}
+
+	
+	
+//	##################################################################################
+
+	
+	
+	@Override
+	public String deleteAccount(int cACno) throws CustomerException {
+		
+		String message=null;
+		try(Connection conn= DBUtil.provideConnection()) {
+		 
+		 
+		
+		 PreparedStatement ps=conn.prepareStatement("delete i from infocustomer i inner join account a on i.cid=a.cid where a.cACno=?;");
+
+		 ps.setInt(1, cACno);
+	
+	     
+		int x=ps.executeUpdate();
+		 
+		 if(x > 0) {
+			 System.out.println("Account deleted sucessfully..!");
+			 System.out.println("-------------------------------");
+		 }else {
+			 System.out.println("Deletion failed...Account Not Found");
+			 System.out.println("------------------------------------");
+		 }	
+		}catch(SQLException e) {
+			
+			e.printStackTrace();
+			message=e.getMessage();
+		}
+		
+		return message;
+
 	}
 
 
@@ -221,34 +261,7 @@ public class AccountantDAOimpl implements AccountantDAO{
 
 	
 	
-//#######################################################################################
-	
-	
-	
-	@Override
-	public int getCustomer(String cmail, String cmob) throws CustomerException {
-		
-		int cid=-1;
-		
-		try(Connection conn = DBUtil.provideConnection()){
-			
-			PreparedStatement ps2=conn.prepareStatement("select cid from InfoCustomer where cmail=? AND cmob=?");
-			 ps2.setString(1, cmail);
-			 ps2.setString(2, cmob);
-			 
-			 ResultSet rs=ps2.executeQuery();
-			 
-			 if(rs.next()) {
-				 cid=rs.getInt("cid");
-			 }
 
-			
-		}catch(SQLException e) {
-			throw new CustomerException(e.getMessage());
-		}
-		return cid;
-		
-	}
 
 	
 //	################################################################################
@@ -300,49 +313,42 @@ public class AccountantDAOimpl implements AccountantDAO{
 			
 	
 		} catch (SQLException e) {
-			throw new CustomerException(e.getMessage());
+			throw new CustomerException("Invalid Account No.");
 		}
 		
 		
 		return cb;
 	}
 
+	//#######################################################################################
 	
 	
-//	##################################################################################
-
 	
-	
-	@Override
-	public String deleteAccount(int cACno) throws CustomerException {
-		
-		String message=null;
-		try(Connection conn= DBUtil.provideConnection()) {
-		 
-		 
-		
-		 PreparedStatement ps=conn.prepareStatement("delete i from infocustomer i inner join account a on i.cid=a.cid where a.cACno=?;");
-
-		 ps.setInt(1, cACno);
-	
-	     
-		int x=ps.executeUpdate();
-		 
-		 if(x > 0)
-			 System.out.println("Account deleted sucessfully..!");
-		 else
-			 System.out.println("Deletion failed");
-		 
-		}catch(SQLException e) {
+		@Override
+		public int getCustomer(String cmail, String cmob) throws CustomerException {
 			
-			e.printStackTrace();
-			message=e.getMessage();
+			int cid=-1;
+			
+			try(Connection conn = DBUtil.provideConnection()){
+				
+				PreparedStatement ps2=conn.prepareStatement("select cid from InfoCustomer where cmail=? AND cmob=?");
+				 ps2.setString(1, cmail);
+				 ps2.setString(2, cmob);
+				 
+				 ResultSet rs=ps2.executeQuery();
+				 
+				 if(rs.next()) {
+					 cid=rs.getInt("cid");
+				 }
+
+				
+			}catch(SQLException e) {
+				throw new CustomerException("Invalid Account No.");
+			}
+			return cid;
+			
 		}
-		
-		return message;
-
-	}
-
+	
 
 	
 	

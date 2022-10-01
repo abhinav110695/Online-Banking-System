@@ -1,6 +1,6 @@
 package com.obs.bean;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
 
 public class TransactionBean {

@@ -1,0 +1,52 @@
+TABLES MySQL
+==============
+
+1. Table to Add an Accountant through hardcoding the name,mail and password in this table
+*****************************
+create table InfoAccountant 
+(							
+ename varchar(20),
+email varchar(25),
+epass varchar(20)
+);
+*****************************
+
+
+2. Table to Add Customer information
+*************************************
+create table InfoCustomer
+(
+cname varchar(20),
+cmail varchar(25),
+cpass varchar(20),
+cmob varchar(10),
+cadd varchar(20),
+cid int primary key auto_increment;
+);
+*************************************
+
+
+3. Account table will take care of the account no and balance mapped through customer id
+****************************************************************
+create table Account
+(
+cACno bigint primary key auto_increment,
+cbal int,
+cid int,
+foreign key(cid) references InfoCustomer(cid) on delete cascade
+);
+
+alter table Account auto_increment=2023001;       //used to start account number with given value
+****************************************************************
+
+
+4. Transaction table will take care all transactions
+***************************************************************
+create table Transaction
+(
+cACno bigint not null,
+deposit int not null,
+withdraw int not null,
+foreign key(cACno) references Account(cACno) on delete cascade
+);
+***************************************************************

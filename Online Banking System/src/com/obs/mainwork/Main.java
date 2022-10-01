@@ -23,16 +23,19 @@ public class Main {
 		
 
 		while(f) {
+			System.out.println("**********************************");
 			System.out.println("Welcome To Online Banking System");
-			 
-			System.out.println("1.Accountant 2.Customer");
-			System.out.println("choose your option");
+			System.out.println("**********************************"); 
+			System.out.println("1. Accountant Portal \r\n"
+					+ "2. Customer Portal \r\n");
+			System.out.println("Choose your option");
 			int choice=sc.nextInt();
 			
 		switch(choice) {
 		case 1:
-			System.out.println("Accountant-LOGIN");
-			System.out.println("Enter username");
+			System.out.println("LOGIN <<---->> ACCOUNTANT");
+			System.out.println("--------------------------");
+			System.out.println("Enter Username");
 			String uname=sc.next();
 			System.out.println("Enter Password");
 			String pass=sc.next();
@@ -41,29 +44,31 @@ public class Main {
 			
 			try {
 				AccountantBean ab=a.LoginAccountant(uname, pass);
-				//System.out.println(ab);
-				System.out.println("Welcome "+ab.getEname());
+				
+				System.out.println("Welcome "+ab.getEname()+" <<---->> Designation: ACCOUNTANT");
 				
 				
 				boolean y=true;
 				
 				while(y) {
-					System.out.println("1. Adding new account for customer\r\n"
+					System.out.println("-----------------------------------------------------------------\r\n"
+							+ "1. Add New Customer Account\r\n"
 							+ "2. Edit existing available account\r\n"
 							+ "3. Remove the account by account number\r\n"
-							+ "4. Viewing particular account details by giving account number\r\n"
-							+ "5. Viewing all the account details\r\n"
+							+ "4. View particular account details by giving account number\r\n"
+							+ "5. View all the account details\r\n"
 							+ "6. Add new account for existing Account holder\r\n"
-							+ "7. Taking care of deposit and withdrawal operations\r\n"
-							+ "8. LOGOUT\r\n");
+							+ "7. View deposit and withdrawal operations for Customer\r\n"
+							+ "8. LOGOUT\r\n"
+							+"-----------------------------------------------------------------\r\n");
 					
 					int x=sc.nextInt();
 					
 					if(x==1) {
-	
-						System.out.println("Enter Name");
+						System.out.println("---------NEW ACCOUNT----------");
+						System.out.println("Enter Customer Name");
 			 			String a2=sc.next();
-			 			System.out.println("Enter Balance");
+			 			System.out.println("Enter Account Opening Balance");
 			 			int a3=sc.nextInt();
 			 			System.out.println("Enter Email");
 			 			String a4=sc.next();
@@ -88,13 +93,15 @@ public class Main {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-			 			if(s1!=-1) {
-			 				System.out.println(s1);
-			 			}
+//			 			if(s1!=-1) {
+////			 				System.out.println(s1);
+						System.out.println("-------------------------------");
+//			 			}
 					}
 					
 					
 					if(x==2) {
+						System.out.println("-------UPDATE ADDRESS-------");
 						System.out.println("Enter Customer Account No. ");
 			 			int u=sc.nextInt();
 			 			System.out.println("Enter new Address");
@@ -108,7 +115,8 @@ public class Main {
 					}
 					
 					if(x==3) {
-						System.out.println("Enter Account no to Delete");
+						System.out.println("---------REMOVE ACCOUNT---------");
+						System.out.println("Enter Account No.");
 						int ac=sc.nextInt();
 						String s=null;
 						try {
@@ -123,6 +131,7 @@ public class Main {
 					}
 					
 					if(x==4) {
+						System.out.println("--------CUSTOMER DETAILS---------");
 						System.out.println("Enter Customer Account No.");
 						String ac=sc.next();
 						
@@ -140,9 +149,10 @@ public class Main {
 								System.out.println("Address: " + mes.getCadd());
 								System.out.println("******************************");
 								
-							}else
-								System.out.println("Account no. does not Exist");
-							
+							}else {
+								System.out.println("Account does not Exist");
+								System.out.println("---------------------------");
+							}
 						} catch (CustomerException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -152,7 +162,7 @@ public class Main {
 					
 					if(x==5) {
 						try {
-							
+							System.out.println("-------ALL CUSTOMER DETAILS------");
 							CustomerBean mes=a.viewAllCustomer();
 		
 							
@@ -163,6 +173,7 @@ public class Main {
 					}
 					
 					if(x==6) {
+						System.out.println("---------NEW ACCOUNT FOR EXISTING ACCOUNT HOLDER----------");
 						System.out.println("Enter email: ");
 						String e=sc.next();
 						System.out.println("Enter mob: ");
@@ -187,6 +198,7 @@ public class Main {
 					
 					if(x==7) {
 						CustomerDAO cd=new CustomerDAOimpl();
+						System.out.println("----------------TRANSACTIONS------------------");
 						System.out.println("Enter Account No. to view Transaction Records");
 						int ac=sc.nextInt();
 						List<TransactionBean> li=null;
@@ -194,10 +206,11 @@ public class Main {
 							li=cd.viewTransaction(ac); 
 							System.out.println("Account No.: "+li.get(0).getAccountNo());
 							li.forEach(v->{
+								System.out.println("---------------------------------------------");
 								if(v.getDeposit()!=0)
-									System.out.println("Deposit: "+v.getDeposit());
+									System.out.println("Amount Credit: "+v.getDeposit());
 								if(v.getWithdraw()!=0)
-									System.out.println("Withdraw: "+v.getWithdraw());
+									System.out.println("Amount Debit: "+v.getWithdraw());
 								System.out.println("Date and Time: "+ v.getTransaction_time());
 							});
 						} catch (CustomerException e) {
@@ -216,14 +229,16 @@ public class Main {
 				
 			} catch (AccountantException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
+				
 			}
+			break;
 		
 //	******************************************************************************
 			
 		case 2:
-			
-			System.out.println("Customer-LOGIN");
+			System.out.println("LOGIN <<---->> CUSTOMER");
+			System.out.println("--------------------------");
 			System.out.println("Enter username");
 			String username=sc.next();
 			System.out.println("Enter Password");
@@ -241,42 +256,51 @@ public class Main {
 				boolean m=true;
 				
 				while(m) {
-					System.out.println("1. View Balance\r\n"
+					System.out.println("-------------------------------\r\n"
+							+ "1. View Balance\r\n"
 							+ "2. Deposit Money\r\n"
 							+ "3. Withdraw Money\r\n"
 							+ "4. Transfer Money\r\n"
 							+ "5. View Transaction History\r\n"
-							+ "6. LOGOUT\r\n");
+							+ "6. LOGOUT\r\n"
+							+"-------------------------------\r\n");
 
 					
 					int x=sc.nextInt();
 					
 					if(x==1) {
+						System.out.println("--------BALANCE----------");
 						System.out.println("Current Account Balance");
 						System.out.println(cd.viewBalance(acno)); 
+						System.out.println("------------------------");
 					}
 					if(x==2) {
+						System.out.println("----------DEPOSIT-----------");
 						System.out.println("Enter Amount to Deposit");
 						int am=sc.nextInt();
 						cd.Deposit(acno, am);
-						System.out.println("Your Balance after deposit");
+						System.out.println("Your Balance after Deposit");
 						System.out.println(cd.viewBalance(acno));
+						System.out.println("----------------------------");
 					}
 					
 					if(x==3) {
+						System.out.println("----------WITHDRAWL------------");
 						System.out.println("Enter Withdrawl amount");
 						int wa=sc.nextInt();
 						try {
 							cd.Withdraw(acno, wa);
-							System.out.println("Your Balance after Withdraw");
+							System.out.println("Your Balance after Withdrawl");
 							System.out.println(cd.viewBalance(acno));
+							System.out.println("-----------------------------");
 						}catch(CustomerException e) {
 							System.out.println(e.getMessage());
 						}
 					}
 					
 					if(x==4) {
-						System.out.println("Enter amount to Transfer");
+						System.out.println("----------AMOUNT TRANSFER-----------");
+						System.out.println("Enter Amount to Transfer");
 						int t=sc.nextInt();
 						System.out.println("Enter Account No. to transfer amount");
 						int ac=sc.nextInt();
@@ -284,6 +308,7 @@ public class Main {
 						try {
 							cd.Transfer(acno, t, ac);
 							System.out.println("Amount transferred Succesfully...");
+							System.out.println("-------------------------------");
 						}catch(CustomerException e) {
 							System.out.println(e.getMessage());
 						}
@@ -296,23 +321,27 @@ public class Main {
 						}catch(CustomerException e) {
 							System.out.println(e.getMessage());
 						}
-						
+						System.out.println("------TRANSACTION HISTORY-------");
 						System.out.println("Account No.: " + li.get(0).getAccountNo());
 						
 						li.forEach(v->{
-							
+							System.out.println("----------------------------------------------------");
 							if(v.getDeposit()!=0)
-								System.out.println("Deposit: "+ v.getDeposit());
+								System.out.println("Amount Credit: "+ v.getDeposit());
 							if(v.getWithdraw()!=0)
-								System.out.println("Widthdraw : "+ v.getWithdraw());
+								System.out.println("Amount Debit : "+ v.getWithdraw());
 							System.out.println("Date and Time: "+ v.getTransaction_time());
 						});
 						
 					}
+					if(x==6) {
+						System.out.println("Customer Logged out");
+						m=false;
+					}
 					
 					
 				}
-			
+				break;
 				
 				
 			} catch (CustomerException e) {
@@ -320,7 +349,7 @@ public class Main {
 				System.out.println(e.getMessage());
 			}
 			
-			
+			break;
 			
 			
 			

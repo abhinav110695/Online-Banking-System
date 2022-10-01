@@ -1,7 +1,6 @@
 package com.obs.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,9 +50,9 @@ public class CustomerDAOimpl implements CustomerDAO {
 			cus=new CustomerBean(ac,n,b,e,p,m,ad);	
 				
 				
-			}else
-				throw new CustomerException("Invalid Username or password.. ");
-			
+			}else {
+				throw new CustomerException("Invalid Username or password....Try Again!");
+			}
 			
 		} catch (SQLException e) {
 			throw new CustomerException(e.getMessage());
@@ -176,7 +175,7 @@ public class CustomerDAOimpl implements CustomerDAO {
 			
 			
 		}else {
-			throw new CustomerException("Incorrect Account detail");
+			throw new CustomerException("Insufficient Balance");
 		}
 		
 		return 0;
