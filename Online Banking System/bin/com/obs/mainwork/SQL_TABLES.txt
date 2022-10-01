@@ -1,0 +1,42 @@
+TABLES MySQL
+==============
+
+Pre-
+create table InfoAccountant
+(
+ename varchar(20),
+email varchar(25),
+epass varchar(20)
+);
+
+
+create table InfoCustomer
+(
+cname varchar(20),
+cmail varchar(25),
+cpass varchar(20),
+cmob varchar(10),
+cadd varchar(20),
+cid int primary key auto_increment;
+);
+
+
+
+create table Account
+(
+cACno bigint primary key auto_increment,
+cbal int,
+cid int,
+foreign key(cid) references InfoCustomer(cid) on delete cascade
+);
+
+alter table Account auto_increment=2023001;
+
+
+create table Transaction
+(
+cACno bigint not null,
+deposit int not null,
+withdraw int not null,
+foreign key(cACno) references Account(cACno) on delete cascade
+);
